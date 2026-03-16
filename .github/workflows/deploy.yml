@@ -16,6 +16,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./files/koens-imposter-game-clean
+
     steps:
       - uses: actions/checkout@v4
 
@@ -32,7 +36,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./files/koens-imposter-game-clean/dist
 
   deploy:
     needs: build
