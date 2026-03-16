@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import { WORDS } from './words';
+import { WORDS as DEFAULT_WORDS } from './words';
 import StartScreen from './components/StartScreen';
 import PlayerSetup from './components/PlayerSetup';
 import NameSetup from './components/NameSetup';
 import GameScreen from './components/GameScreen';
 import DiscussionScreen from './components/DiscussionScreen';
 import ResultScreen from './components/ResultScreen';
+import WordEditor from './components/WordEditor';
 
 export default function App() {
   // start = beginscherm,
   // setup = # spelers kiezen,
   // names = namen invullen (optioneel),
   // game = elke speler ziet zijn kaart (woord of IMPOSTER),
+  // wordSettings = woordenlijst aanpassen,
   // discussion = iedereen overlegt zonder oplossing,
   // result = overzicht met woord + wie imposter was
   const [gameState, setGameState] = useState('start');
@@ -20,9 +22,29 @@ export default function App() {
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [currentWord, setCurrentWord] = useState('');
   const [imposterIndex, setImposterIndex] = useState(-1);
+  const [words, setWords] = useState(DEFAULT_WORDS);
   const [useNames, setUseNames] = useState(false);
   const [playerNames, setPlayerNames] = useState([]);
   const [turnOrder, setTurnOrder] = useState([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('imposterWords');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setWords(parsed);
+        }
+      } catch {
+        // ignore invalid stored data
+      }
+    }
+  }, []);
+
+  const updateWords = (newWords) => {
+    setWords(newWords);
+    localStorage.setItem('imposterWords', JSON.stringify(newWords));
+  };
 
   const handleStartWithNames = () => {
     setUseNames(true);
@@ -41,7 +63,7 @@ export default function App() {
       setGameState('names');
     } else {
       // Direct spelen met generieke spelers
-      const randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+      const randomWord = words[Math.floor(Math.random() * words.length)];
       setCurrentWord(randomWord);
       const randomImposter = Math.floor(Math.random() * count);
       setImposterIndex(randomImposter);
@@ -54,7 +76,7 @@ export default function App() {
   const handleNamesConfirmed = (names) => {
     setPlayerNames(names);
     const count = names.length;
-    const randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+    const randomWord = words[Math.floor(Math.random() * words.length)];
     setCurrentWord(randomWord);
     const randomImposter = Math.floor(Math.random() * count);
     setImposterIndex(randomImposter);
@@ -83,7 +105,7 @@ export default function App() {
   };
 
   const handlePlayAgain = () => {
-    const randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+    const randomWord = words[Math.floor(Math.random() * words.length)];
     setCurrentWord(randomWord);
     const randomImposter = Math.floor(Math.random() * playerCount);
     setImposterIndex(randomImposter);
@@ -113,17 +135,33 @@ export default function App() {
     setTurnOrder([]);
   };
 
+  const handleEditWords = () => {
+    setGameState('wordSettings');
+  };
+
   return (
     <div className="app">
       {gameState === 'start' && (
         <StartScreen
           onStartWithNames={handleStartWithNames}
           onStartWithoutNames={handleStartWithoutNames}
+          onEditWords={handleEditWords}
         />
       )}
       {gameState === 'setup' && <PlayerSetup onCountSelected={handlePlayerCountSelected} />}
       {gameState === 'names' && (
         <NameSetup playerCount={playerCount} onNamesConfirmed={handleNamesConfirmed} />
+      )}
+      {gameState === 'wordSettings' && (
+        <WordEditor
+          words={words}
+          onSave={(list) => {
+            updateWords(list);
+            setGameState('start');
+          }}
+          onReset={() => updateWords(DEFAULT_WORDS)}
+          onBack={() => setGameState('start')}
+        />
       )}
       {gameState === 'game' && (
         <GameScreen

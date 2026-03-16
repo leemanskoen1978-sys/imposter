@@ -1,7 +1,7 @@
 import React from 'react';
 import './StartScreen.css';
 
-export default function StartScreen({ onStartWithNames, onStartWithoutNames }) {
+export default function StartScreen({ onStartWithNames, onStartWithoutNames, onEditWords }) {
   return (
     <div className="start-screen screen">
       <h1>🎭 IMPOSTER</h1>
@@ -25,6 +25,13 @@ export default function StartScreen({ onStartWithNames, onStartWithoutNames }) {
         onClick={onStartWithoutNames}
       >
         SPELEN ZONDER NAMEN
+      </button>
+
+      <button
+        className="button button-secondary button-start"
+        onClick={onEditWords}
+      >
+        WOORDENLIJST AANPASSEN
       </button>
 
       <p className="subtitle">Zorg dat de telefoon goed wordt doorgegeven! 📲</p>
