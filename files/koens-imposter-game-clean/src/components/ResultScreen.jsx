@@ -4,6 +4,7 @@ import './ResultScreen.css';
 export default function ResultScreen({
   word,
   imposterIndex,
+  imposterName,
   playerCount,
   onPlayAgain,
   onBackToStart,
@@ -20,7 +21,9 @@ export default function ResultScreen({
 
         <div className="result-box imposter-reveal-box">
           <p className="label">De IMPOSTER was:</p>
-          <p className="imposter-number">SPELER {imposterIndex + 1}</p>
+          <p className="imposter-number">
+            {imposterName ? imposterName : `SPELER ${imposterIndex + 1}`}
+          </p>
         </div>
 
         <div className="stats-box">

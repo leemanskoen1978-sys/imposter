@@ -118,6 +118,21 @@
   text-align: center;
 }
 
+.player-intro {
+  font-size: 16px;
+  color: #ffed4e;
+  margin-bottom: 8px;
+}
+
+.reveal-title {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffd700;
+  margin-bottom: 10px;
+}
+
 .reveal-instruction p {
   margin: 10px 0;
   font-size: 18px;

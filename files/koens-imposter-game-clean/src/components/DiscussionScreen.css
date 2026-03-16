@@ -1,0 +1,14 @@
+.discussion-screen {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.discussion-tip {
+  font-size: 14px;
+  color: #aaa;
+}
+
