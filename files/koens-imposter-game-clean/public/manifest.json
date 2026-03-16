@@ -2,8 +2,9 @@
   "name": "Koen's Imposter Game",
   "short_name": "Imposter Game",
   "description": "Een leuk spel voor vrienden - wie is de oplichter?",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/imposter/",
+  "scope": "/imposter/",
+  
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#1a1a2e",
